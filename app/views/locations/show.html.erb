@@ -1,26 +1,27 @@
-<%= @buses %>
-
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Street address:</strong>
-  <%= @location.street_address %>
+<h1>Premeditated Portal Locations</h1>
+
+<h3 class="text-muted">Your current place in time & space</h3>
+
+<p class="text-muted">
+  <%= @location.full_street_address %> <small><%= link_to  fa_icon('pencil', text: 'Edit'), edit_location_path(@location) %></small>
 </p>
 
-<p>
-  <strong>City:</strong>
-  <%= @location.city %>
-</p>
+<h3>The closest portals are...</h3>
+<% @buses.each do |bus| %>
 
-<p>
-  <strong>Latitude:</strong>
-  <%= @location.latitude %>
-</p>
+<div class='well'>
+  <strong>Route:</strong><%= bus["ROUTE"] %> <%= bus["DIRECTION"] %> <br>
+  <strong>Portal Number:</strong><%= bus["VEHICLE"] %> <br>
+  <strong>Next Opening:</strong><%= bus["TIMEPOINT"] %>
+</div>
 
-<p>
-  <strong>Longitude:</strong>
-  <%= @location.longitude %>
-</p>
+<% end %>
 
-<%= link_to 'Edit', edit_location_path(@location) %> |
-<%= link_to 'Back', locations_path %>
+<% if @buses.empty? %>
+<h3>
+  No portals near you broh!, get to wiggety wiggety walkin' son!, or <%=
+  link_to 'change your location', edit_location_path(@location) %>
+</h3>
+<% end %>
