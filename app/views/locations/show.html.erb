@@ -8,7 +8,9 @@
   <%= @location.full_street_address %> <small><%= link_to  fa_icon('pencil', text: 'Edit'), edit_location_path(@location) %></small>
 </p>
 
-<h3>The closest portals are...</h3>
+<div id="map-canvas"></div>
+
+<h3>The closest buses are...</h3>
 <% @buses.each do |bus| %>
 
 <div class='well'>
@@ -25,3 +27,28 @@
   link_to 'change your location', edit_location_path(@location) %>
 </h3>
 <% end %>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['google_maps_api_key'] %>"></script>
+
+<script>
+  function intialize() {
+    var myLocation = new google.maps.LatLng(<%= @location.latitude %>, <%= @location.longitude %>);
+
+    var mapOptions = {
+      center: myLocation,
+      zoom: 15
+    };
+
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+    var MyMarker = new google.maps.Marker({
+      position: myLocation,
+      map: map,
+      animation: google.maps.Animation.DROP,
+      title: 'My Location'
+
+    });
+  }
+
+  google.maps.event.addDomListener(window, 'load', intialize);
+</script>
